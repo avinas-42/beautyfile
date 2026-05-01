@@ -1,0 +1,3 @@
+# Copier vers .deployment.local et renseigner l’ID affiché après
+# Déployer → Gérer les déploiements → Module complémentaire.
+BEAUTYFILE_DEPLOYMENT_ID=YOUR_DEPLOYMENT_ID_HERE

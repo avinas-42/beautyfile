@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Apps Script — scriptId local. Modèle : .clasp.json.example
+.clasp.json
+
+# ID déploiement « module complémentaire ». Modèle : .deployment.local.example
+.deployment.local
+
+# Variables d'environnement et fichiers secrets locaux
+.env
+.env.*
+!.env.example
+
+# Jetons / identifiants Google souvent copiés par erreur dans le projet
+.clasprc.json
+credentials.json
+client_secret.json
+client_secret_*.json
+token.json
+token_*.json
+*service-account*.json
+
+# OS / éditeurs
+.DS_Store
+
+# Logs npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Documentation interne (publication, transfert agent, QA — hors Pages)
+docs/*.md

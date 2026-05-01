@@ -1,0 +1,25 @@
+{
+  "timeZone": "Europe/Paris",
+  "dependencies": {},
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/documents.currentonly",
+    "https://www.googleapis.com/auth/script.locale"
+  ],
+  "addOns": {
+    "common": {
+      "name": "Beauty File",
+      "logoUrl": "https://www.gstatic.com/images/branding/product/2x/docs_48dp.png",
+      "layoutProperties": {
+        "primaryColor": "#1a73e8",
+        "secondaryColor": "#4285f4"
+      },
+      "homepageTrigger": {
+        "runFunction": "onHomepageOpen",
+        "enabled": true
+      }
+    },
+    "docs": {}
+  }
+}
