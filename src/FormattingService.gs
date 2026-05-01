@@ -1,5 +1,5 @@
 /**
- * Parcourt le document et applique police / taille / gras / couleur uniquement aux plages
+ * Parcourt le document et applique police / taille / gras / italique / souligné / couleur uniquement aux plages
  * correspondant à la portée choisie (tout le texte, lettres majuscules, ou lettres minuscules).
  */
 
@@ -10,6 +10,8 @@
  *   fontFamily: string,
  *   fontSizePt: ?number,
  *   bold: boolean,
+ *   italic: boolean,
+ *   underline: boolean,
  *   foregroundColor: string,
  *   includeHeadersFooters: boolean
  * }} options
@@ -152,6 +154,8 @@ function bfApplyToText_(text, options) {
       text.setFontSize(a, b, options.fontSizePt);
     }
     text.setBold(a, b, Boolean(options.bold));
+    text.setItalic(a, b, Boolean(options.italic));
+    text.setUnderline(a, b, Boolean(options.underline));
     if (options.foregroundColor) {
       text.setForegroundColor(a, b, options.foregroundColor);
     }

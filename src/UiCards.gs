@@ -14,9 +14,11 @@ function bfFontCategoryDisplayName_(msg, slug) {
 }
 
 /**
- * @return {string} première catégorie non vide
+ * @return {string} catégorie par défaut : « Classiques Docs » si disponible, sinon première non vide.
  */
 function bfDefaultFontCategory_() {
+  var docsArr = BF_FONT_CHOICES_BY_CATEGORY['docs'];
+  if (docsArr && docsArr.length) return 'docs';
   for (var i = 0; i < BF_FONT_CATEGORY_ORDER.length; i++) {
     var c = BF_FONT_CATEGORY_ORDER[i];
     var arr = BF_FONT_CHOICES_BY_CATEGORY[c];
@@ -284,12 +286,17 @@ function bfBuildMainCard_(msg, prefs, cardOpts) {
     .setTitle(msg.sizeLabelFull)
     .setValue(sizeVal);
 
-  var boldSection = CardService.newSelectionInput()
+  var emphasisKey = bfEmphasisKeyFromBools_(mergedDisplay.bold, mergedDisplay.italic, mergedDisplay.underline);
+  var emphasisSection = CardService.newSelectionInput()
     .setType(CardService.SelectionInputType.DROPDOWN)
-    .setFieldName(BF_FIELDS.BOLD)
-    .setTitle(msg.boldLabel)
-    .addItem(msg.boldNo, '0', !mergedDisplay.bold)
-    .addItem(msg.boldYes, '1', !!mergedDisplay.bold);
+    .setFieldName(BF_FIELDS.TEXT_EMPHASIS)
+    .setTitle(msg.textEmphasisLabel);
+  var names = msg.textEmphasisNames;
+  for (var ei = 0; ei < BF_TEXT_EMPHASIS_ORDER.length; ei++) {
+    var ek = BF_TEXT_EMPHASIS_ORDER[ei];
+    var elabel = names && names[ek] ? names[ek] : ek;
+    emphasisSection.addItem(elabel, ek, ek === emphasisKey);
+  }
 
   var nc = bfNormalizeHexColor_(mergedDisplay.foregroundColor || '');
 
@@ -322,7 +329,7 @@ function bfBuildMainCard_(msg, prefs, cardOpts) {
     .addWidget(categorySection)
     .addWidget(fontSection)
     .addWidget(sizeInput)
-    .addWidget(boldSection)
+    .addWidget(emphasisSection)
     .addWidget(colorRgbInput)
     .addWidget(colorInput)
     .addWidget(CardService.newButtonSet().addButton(button));

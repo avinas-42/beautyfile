@@ -158,6 +158,8 @@ function applyBeautyFileWithSavedPreferences() {
     fontFamily: prefs.fontFamily || '',
     fontSizePt: prefs.fontSizePt,
     bold: !!prefs.bold,
+    italic: !!prefs.italic,
+    underline: !!prefs.underline,
     foregroundColor: prefs.foregroundColor || '',
     includeHeadersFooters: false,
   };
@@ -180,6 +182,41 @@ function bfNormalizeCharScope_(raw) {
 }
 
 /**
+ * @param {boolean} bold
+ * @param {boolean} italic
+ * @param {boolean} underline
+ * @return {string} clé BF_TEXT_EMPHASIS_ORDER
+ */
+function bfEmphasisKeyFromBools_(bold, italic, underline) {
+  var b = bold ? 1 : 0;
+  var i = italic ? 1 : 0;
+  var u = underline ? 1 : 0;
+  var n = b * 4 + i * 2 + u;
+  var keys = ['none', 'underline', 'italic', 'italic_underline', 'bold', 'bold_underline', 'bold_italic', 'all'];
+  return keys[n];
+}
+
+/**
+ * @param {string|null|undefined} key
+ * @return {{bold:boolean,italic:boolean,underline:boolean}|null}
+ */
+function bfBoolsFromEmphasisStr_(key) {
+  if (key == null || key === '') return null;
+  var k = String(key);
+  var map = {
+    none: { bold: false, italic: false, underline: false },
+    underline: { bold: false, italic: false, underline: true },
+    italic: { bold: false, italic: true, underline: false },
+    italic_underline: { bold: false, italic: true, underline: true },
+    bold: { bold: true, italic: false, underline: false },
+    bold_underline: { bold: true, italic: false, underline: true },
+    bold_italic: { bold: true, italic: true, underline: false },
+    all: { bold: true, italic: true, underline: true },
+  };
+  return map[k] || null;
+}
+
+/**
  * Lecture souple des champs carte pour rebuild (pas de throw taille/couleur).
  * @param {Object} inputs formInputs
  * @return {Object}
@@ -191,7 +228,10 @@ function bfParseCardDraft_(inputs) {
     fontCategory: bfReadSelection_(inputsObj, BF_FIELDS.FONT_CATEGORY),
     fontFamily: bfReadSelection_(inputsObj, BF_FIELDS.FONT_FAMILY),
     fontSizeStr: bfReadString_(inputsObj, BF_FIELDS.FONT_SIZE),
+    emphasisStr: bfReadSelection_(inputsObj, BF_FIELDS.TEXT_EMPHASIS),
     boldStr: bfReadSelection_(inputsObj, BF_FIELDS.BOLD),
+    italicStr: bfReadSelection_(inputsObj, BF_FIELDS.ITALIC),
+    underlineStr: bfReadSelection_(inputsObj, BF_FIELDS.UNDERLINE),
     colorPresetStr: bfReadSelection_(inputsObj, BF_FIELDS.COLOR_PRESET),
     colorRaw: bfReadString_(inputsObj, BF_FIELDS.FOREGROUND_COLOR),
     colorRgbCompact: bfReadString_(inputsObj, BF_FIELDS.COLOR_RGB),
@@ -204,18 +244,22 @@ function bfParseCardDraft_(inputs) {
 /**
  * @param {Object} prefs bfPrefsLoad()
  * @param {Object|null} draftRaw bfParseCardDraft_
- * @return {{charScope:string,fontSizePt:?number,bold:boolean,foregroundColor:string}}
+ * @return {{charScope:string,fontSizePt:?number,bold:boolean,italic:boolean,underline:boolean,foregroundColor:string}}
  */
 function bfMergeDisplayPrefsForCard_(prefs, draftRaw) {
   var charScope = bfNormalizeCharScope_(prefs.charScope || BF_SCOPE.ALL);
   var fontSizePt = prefs.fontSizePt;
   var bold = !!prefs.bold;
+  var italic = !!prefs.italic;
+  var underline = !!prefs.underline;
   var foregroundColor = prefs.foregroundColor || '';
   if (!draftRaw) {
     return {
       charScope: charScope,
       fontSizePt: fontSizePt,
       bold: bold,
+      italic: italic,
+      underline: underline,
       foregroundColor: foregroundColor,
     };
   }
@@ -224,12 +268,23 @@ function bfMergeDisplayPrefsForCard_(prefs, draftRaw) {
     var n = Number(String(draftRaw.fontSizeStr).replace(',', '.'));
     if (!isNaN(n) && n >= 1 && n <= 400) fontSizePt = n;
   }
-  if (draftRaw.boldStr === '0' || draftRaw.boldStr === '1') bold = draftRaw.boldStr === '1';
+  var biuEmphasis = bfBoolsFromEmphasisStr_(draftRaw.emphasisStr);
+  if (biuEmphasis) {
+    bold = biuEmphasis.bold;
+    italic = biuEmphasis.italic;
+    underline = biuEmphasis.underline;
+  } else {
+    if (draftRaw.boldStr === '0' || draftRaw.boldStr === '1') bold = draftRaw.boldStr === '1';
+    if (draftRaw.italicStr === '0' || draftRaw.italicStr === '1') italic = draftRaw.italicStr === '1';
+    if (draftRaw.underlineStr === '0' || draftRaw.underlineStr === '1') underline = draftRaw.underlineStr === '1';
+  }
   foregroundColor = bfForegroundColorFromDraft_(prefs.foregroundColor || '', draftRaw);
   return {
     charScope: charScope,
     fontSizePt: fontSizePt,
     bold: bold,
+    italic: italic,
+    underline: underline,
     foregroundColor: foregroundColor,
   };
 }
@@ -403,8 +458,23 @@ function bfParseFormInputs_(inputs) {
     fontSizePt = n;
   }
 
-  var boldStr = bfReadSelection_(inputs, BF_FIELDS.BOLD) || '0';
-  var bold = boldStr === '1';
+  var emphasisRaw = bfReadSelection_(inputs, BF_FIELDS.TEXT_EMPHASIS);
+  var biuForm = bfBoolsFromEmphasisStr_(emphasisRaw);
+  var bold;
+  var italic;
+  var underline;
+  if (biuForm) {
+    bold = biuForm.bold;
+    italic = biuForm.italic;
+    underline = biuForm.underline;
+  } else {
+    var boldStr = bfReadSelection_(inputs, BF_FIELDS.BOLD) || '0';
+    bold = boldStr === '1';
+    var italicStr = bfReadSelection_(inputs, BF_FIELDS.ITALIC) || '0';
+    italic = italicStr === '1';
+    var underlineStr = bfReadSelection_(inputs, BF_FIELDS.UNDERLINE) || '0';
+    underline = underlineStr === '1';
+  }
 
   var foregroundColor = bfResolveForegroundColorFromForm_(inputs, true);
 
@@ -413,6 +483,8 @@ function bfParseFormInputs_(inputs) {
     fontFamily: fontFamily,
     fontSizePt: fontSizePt,
     bold: bold,
+    italic: italic,
+    underline: underline,
     foregroundColor: foregroundColor,
   };
 }

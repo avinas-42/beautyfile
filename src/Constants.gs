@@ -6,7 +6,12 @@ var BF_FIELDS = {
   FONT_CATEGORY: 'bf_font_category',
   FONT_FAMILY: 'bf_font_family',
   FONT_SIZE: 'bf_font_size',
+  /** Gras + italique + souligné (une ligne). */
+  TEXT_EMPHASIS: 'bf_text_emphasis',
+  /** Anciens menus séparés (cartes encore envoyées par le client). */
   BOLD: 'bf_bold',
+  ITALIC: 'bf_italic',
+  UNDERLINE: 'bf_underline',
   /** Ancien menu déroulant couleur (formulaires encore envoyés par le client). */
   COLOR_PRESET: 'bf_color_preset',
   FOREGROUND_COLOR: 'bf_foreground_color',
@@ -24,7 +29,7 @@ var BF_COLOR_PRESET_INHERIT = '__bf_color_inherit__';
 var BF_COLOR_PRESET_CUSTOM = '__bf_color_custom__';
 
 /**
- * Portée des caractères à modifier (police, taille, gras, couleur — pas une conversion de casse globale).
+ * Portée des caractères à modifier (police, taille, gras, italique, souligné, couleur — pas une conversion de casse globale).
  * Valeurs stockées dans les préférences / formulaire.
  */
 var BF_SCOPE = {
@@ -34,6 +39,18 @@ var BF_SCOPE = {
   /** Lettres affichées en minuscules uniquement */
   LOWER: 'lower',
 };
+
+/** Ordre du menu combiné gras / italique / souligné (valeurs du formulaire). */
+var BF_TEXT_EMPHASIS_ORDER = [
+  'none',
+  'bold',
+  'italic',
+  'underline',
+  'bold_italic',
+  'bold_underline',
+  'italic_underline',
+  'all',
+];
 
 /**
  * Approximate character limit before warning / refusal (runtime safety).
@@ -48,6 +65,8 @@ var BF_PROP_KEYS = {
   FONT_FAMILY: 'bf_default_font',
   FONT_SIZE: 'bf_default_size',
   BOLD: 'bf_default_bold',
+  ITALIC: 'bf_default_italic',
+  UNDERLINE: 'bf_default_underline',
   FOREGROUND_COLOR: 'bf_default_color',
 };
 

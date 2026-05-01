@@ -10,6 +10,10 @@ function bfPrefsSave(options) {
     p.setProperty(BF_PROP_KEYS.FONT_SIZE, String(options.fontSizePt));
   if (options.bold !== undefined && options.bold !== null)
     p.setProperty(BF_PROP_KEYS.BOLD, options.bold ? '1' : '0');
+  if (options.italic !== undefined && options.italic !== null)
+    p.setProperty(BF_PROP_KEYS.ITALIC, options.italic ? '1' : '0');
+  if (options.underline !== undefined && options.underline !== null)
+    p.setProperty(BF_PROP_KEYS.UNDERLINE, options.underline ? '1' : '0');
   if (options.foregroundColor) p.setProperty(BF_PROP_KEYS.FOREGROUND_COLOR, options.foregroundColor);
 }
 
@@ -31,6 +35,8 @@ function bfPrefsLoad() {
       ? Number(p.getProperty(BF_PROP_KEYS.FONT_SIZE))
       : null,
     bold: p.getProperty(BF_PROP_KEYS.BOLD) === '1',
+    italic: p.getProperty(BF_PROP_KEYS.ITALIC) === '1',
+    underline: p.getProperty(BF_PROP_KEYS.UNDERLINE) === '1',
     foregroundColor: p.getProperty(BF_PROP_KEYS.FOREGROUND_COLOR) || '',
   };
 }
