@@ -10,7 +10,8 @@
     "clasp:status": "clasp status",
     "test": "vitest run",
     "test:watch": "vitest",
-    "fonts:sync": "node scripts/sync-fonts.mjs"
+    "fonts:sync": "node scripts/sync-fonts.mjs",
+    "banner:marketplace": "python3 scripts/gen-marketplace-banner.py"
   },
   "devDependencies": {
     "@google/clasp": "^2.4.2",

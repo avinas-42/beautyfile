@@ -13,9 +13,21 @@ import { dirname, join } from 'path';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
+function stripQuotes(s) {
+  const t = s.trim();
+  if (t.length >= 2) {
+    const q = t[0];
+    if ((q === '"' || q === "'") && t[t.length - 1] === q) {
+      return t.slice(1, -1).trim();
+    }
+  }
+  return t;
+}
+
 function loadDeploymentId() {
-  if (process.env.BEAUTYFILE_DEPLOYMENT_ID) {
-    return process.env.BEAUTYFILE_DEPLOYMENT_ID.trim();
+  const fromEnv = process.env.BEAUTYFILE_DEPLOYMENT_ID;
+  if (fromEnv && fromEnv.trim()) {
+    return stripQuotes(fromEnv);
   }
   const p = join(root, '.deployment.local');
   if (!existsSync(p)) return '';
@@ -23,8 +35,8 @@ function loadDeploymentId() {
   for (const line of text.split(/\r?\n/)) {
     const t = line.trim();
     if (!t || t.startsWith('#')) continue;
-    const m = /^BEAUTYFILE_DEPLOYMENT_ID=(.+)$/.exec(t);
-    if (m) return m[1].trim();
+    const m = /^BEAUTYFILE_DEPLOYMENT_ID\s*=\s*(.*)$/.exec(t);
+    if (m) return stripQuotes(m[1]);
   }
   return '';
 }
@@ -39,7 +51,9 @@ if (!deploymentId || deploymentId === 'YOUR_DEPLOYMENT_ID_HERE') {
   process.exit(1);
 }
 if (!/^[A-Za-z0-9_-]+$/.test(deploymentId)) {
-  console.error('BEAUTYFILE_DEPLOYMENT_ID has unexpected characters.');
+  console.error(
+    'BEAUTYFILE_DEPLOYMENT_ID contient des caractères inattendus (lettres, chiffres, _ et - uniquement).'
+  );
   process.exit(1);
 }
 
@@ -52,11 +66,19 @@ function runClasp(args) {
     stdio: 'inherit',
     shell: process.platform === 'win32',
   });
-  if (r.status !== 0 && r.status !== null) process.exit(r.status);
-  if (r.error) throw r.error;
+  if (r.error) {
+    console.error(r.error.message || String(r.error));
+    process.exit(1);
+  }
+  const code = r.status;
+  if (code !== 0) {
+    process.exit(code === null ? 1 : code);
+  }
 }
 
 runClasp(['push']);
 runClasp(['deploy', '-i', deploymentId, '-d', desc]);
 
-console.log('\nOK — Nouvelle version déployée sur le même ID. Recharge Google Docs / réouvre le panneau add-on.');
+console.log(
+  '\nOK — Nouvelle version déployée sur le même ID. Recharge Google Docs / réouvre le panneau add-on.'
+);

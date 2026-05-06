@@ -346,6 +346,22 @@ function bfBuildMainCard_(msg, prefs, cardOpts) {
     .build();
 }
 
+/**
+ * Fallback card if the homepage fails to build (reviewers still see a functional panel).
+ * @param {Object} msg
+ * @return {GoogleAppsScript.Card.Card}
+ */
+function bfBuildHomepageErrorCard_(msg) {
+  return CardService.newCardBuilder()
+    .setHeader(CardService.newCardHeader().setTitle(msg.title).setSubtitle(msg.subtitle))
+    .addSection(
+      CardService.newCardSection().addWidget(
+        CardService.newTextParagraph().setText(msg.errHomepageLoad)
+      )
+    )
+    .build();
+}
+
 function bfCardHeader_(msg) {
   return CardService.newCardHeader().setTitle(msg.title).setSubtitle(msg.subtitle);
 }

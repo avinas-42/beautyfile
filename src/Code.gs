@@ -8,9 +8,15 @@
  * @return {GoogleAppsScript.Card.Card}
  */
 function onHomepageOpen(e) {
-  var msg = bfMessagesFromEvent(e);
-  var prefs = bfPrefsLoad();
-  return bfBuildMainCard_(msg, prefs, {});
+  try {
+    var msg = bfMessagesFromEvent(e);
+    var prefs = bfPrefsLoad();
+    return bfBuildMainCard_(msg, prefs, {});
+  } catch (err) {
+    console.error(err);
+    var msg = bfMessagesFromEvent(e);
+    return bfBuildHomepageErrorCard_(msg);
+  }
 }
 
 /**

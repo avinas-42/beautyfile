@@ -50,6 +50,8 @@ var BF_MESSAGES = {
   errInvalidColor: 'Invalid color. Use #rrggbb.',
   errInvalidSize: 'Invalid size. Use a number between 1 and 400.',
   errGeneric: 'Something went wrong. Try again or check logs.',
+  errHomepageLoad:
+    'Could not load the add-on panel. Open this add-on from the right-side add-ons panel in Google Docs (not only Help). If this persists, contact arnauz72@gmail.com',
 };
 
 /**
