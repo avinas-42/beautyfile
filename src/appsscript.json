@@ -10,7 +10,7 @@
   "addOns": {
     "common": {
       "name": "Beauty File",
-      "logoUrl": "https://www.gstatic.com/images/branding/product/2x/docs_48dp.png",
+      "logoUrl": "https://avinas-42.github.io/beautyfile/assets/beautyfile-addon-logo.png",
       "layoutProperties": {
         "primaryColor": "#1a73e8",
         "secondaryColor": "#4285f4"
