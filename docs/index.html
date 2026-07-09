@@ -3,16 +3,99 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Beauty File — Legal</title>
-    <link rel="canonical" href="privacy.html" />
+    <title>Beauty File — Google Docs™ formatting add-on</title>
+    <link rel="canonical" href="https://avinas-42.github.io/beautyfile/" />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --fg: #1a1a1a;
+        --muted: #555;
+        --bg: #fff;
+        --accent: #1a73e8;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --fg: #f2f2f2;
+          --muted: #aaa;
+          --bg: #121212;
+          --accent: #8ab4f8;
+        }
+      }
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        line-height: 1.55;
+        max-width: 42rem;
+        margin: 0 auto;
+        padding: 1.5rem 1.25rem 3rem;
+        color: var(--fg);
+        background: var(--bg);
+      }
+      h1 {
+        font-size: 1.5rem;
+        line-height: 1.25;
+        margin-bottom: 0.35rem;
+      }
+      .meta {
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+      }
+      p {
+        margin: 0.6rem 0;
+      }
+      a {
+        color: var(--accent);
+      }
+      .logo {
+        width: 72px;
+        height: 72px;
+        border-radius: 16px;
+        margin-bottom: 1rem;
+      }
+      nav {
+        margin-top: 1.75rem;
+        padding-top: 1rem;
+        border-top: 1px solid color-mix(in srgb, var(--muted) 35%, transparent);
+        font-size: 0.95rem;
+      }
+    </style>
   </head>
   <body>
+    <img
+      class="logo"
+      src="assets/beautyfile-addon-logo.png"
+      width="72"
+      height="72"
+      alt="Beauty File logo"
+    />
+    <h1>Beauty File</h1>
+    <p class="meta">Google Workspace™ add-on for Google Docs™</p>
+
     <p>
-      <a href="developer.html">Developer</a>
-      ·
+      Beauty File applies targeted formatting from the document sidebar: letter scope (all text,
+      uppercase-only, or lowercase-only), font, size, bold, italic, underline, and color—without
+      changing case across the whole document.
+    </p>
+
+    <p>
+      The add-on runs on Google Apps Script™ when you use it in Google Docs™. It accesses only the
+      open document to apply formatting you trigger in the panel.
+    </p>
+
+    <p><strong>Support:</strong> <a href="mailto:arnauz72@gmail.com">arnauz72@gmail.com</a></p>
+
+    <nav>
       <a href="privacy.html">Privacy policy</a>
       ·
       <a href="terms.html">Terms of service</a>
+      ·
+      <a href="developer.html">Developer</a>
+      ·
+      <a href="https://github.com/avinas-42/beautyfile">Source on GitHub</a>
+    </nav>
+
+    <p class="meta">
+      Google Docs™, Google Workspace™, and Google Apps Script™ are trademarks of Google LLC.
     </p>
   </body>
 </html>
