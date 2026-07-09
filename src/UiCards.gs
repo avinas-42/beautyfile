@@ -163,11 +163,13 @@ var BF_COLOR_SWATCHES_PER_ROW = 4;
  * @return {GoogleAppsScript.Card.TextButton}
  */
 function bfNewColorSwatchButton_(hex) {
+  /** Sans « # » : certains clients tronquent la valeur si elle commence par # (fragment URL). */
+  var hex6 = String(hex || '').replace(/^#/, '').toLowerCase();
   return CardService.newTextButton()
     .setText('\u200b')
     .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
     .setBackgroundColor(hex)
-    .setOnClickAction(CardService.newAction().setFunctionName('onColorPick').setParameters({ hex: String(hex) }));
+    .setOnClickAction(CardService.newAction().setFunctionName('onColorPick').setParameters({ hex6: hex6 }));
 }
 
 /**

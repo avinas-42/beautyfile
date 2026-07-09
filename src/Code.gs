@@ -38,6 +38,21 @@ function onFontCategoryChange(e) {
 }
 
 /**
+ * Paramètres clic pastille nuancier. Préfère hex6 (sans #) : le # peut être mangé par le transport Card.
+ * @param {Object} params e.parameters / commonEventObject.parameters
+ * @return {string} #rrggbb ou ''
+ */
+function bfHexFromSwatchPickParams_(params) {
+  if (!params) return '';
+  var h6 = params.hex6 != null ? String(params.hex6).trim() : '';
+  if (/^[0-9a-fA-F]{6}$/.test(h6)) return '#' + h6.toLowerCase();
+  var hex = params.hex != null ? String(params.hex).trim() : '';
+  if (hex && /^#[0-9a-fA-F]{6}$/.test(hex)) return hex.toLowerCase();
+  if (/^[0-9a-fA-F]{6}$/.test(hex)) return '#' + hex.toLowerCase();
+  return '';
+}
+
+/**
  * Clic sur une pastille du nuancier : met à jour la couleur affichée (RGB + hex).
  * @param {GoogleAppsScript.Events.BaseEvent} e
  * @return {GoogleAppsScript.Card.ActionResponse}
@@ -51,8 +66,7 @@ function onColorPick(e) {
     (e && e.commonEventObject && e.commonEventObject.parameters) ||
     (e && e.parameters) ||
     {};
-  var hex = params.hex;
-  if (hex && typeof hex === 'object') hex = String(hex);
+  var hex = bfHexFromSwatchPickParams_(params);
   if (hex && /^#[0-9a-fA-F]{6}$/.test(hex)) {
     hex = hex.toLowerCase();
     draftRaw.colorRaw = hex;
